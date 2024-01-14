@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 class UserRepository @Inject constructor(): UsersDao {
     override fun getUsers(): List<UserEntity> {
-        val sergio = UserEntity(username = "Sergio", password = "nutriasninja")
+        val sergio = UserEntity(username = "a", password = "a")
         val andrea = UserEntity(username = "Andrea", password = "nutriasninja")
         return listOf(sergio, andrea)
     }

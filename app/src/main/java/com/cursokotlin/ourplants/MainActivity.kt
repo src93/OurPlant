@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.cursokotlin.ourplants.home.ui.HomeViewModel
+import com.cursokotlin.ourplants.interactivedonut.ui.InteractiveDonutViewModel
 import com.cursokotlin.ourplants.login.ui.LoginViewModel
 import com.cursokotlin.ourplants.nav.ui.MainViewModel
 import com.cursokotlin.ourplants.nav.ui.NavGraph
@@ -19,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
+    private val interactiveDonutViewModel: InteractiveDonutViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -30,7 +32,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val mainViewModel = MainViewModel(
                         loginViewModel = loginViewModel,
-                        homeViewModel = homeViewModel
+                        homeViewModel = homeViewModel,
+                        interactiveDonutViewModel = interactiveDonutViewModel
                     )
                     NavGraph(mainViewModel = mainViewModel, finishActivity = { finish() })
                 }

@@ -31,7 +31,7 @@ fun NavGraph(
         }
 
         composable(route = MainDestinations.HOME_ROUTE) {
-            HomeScreen()
+            HomeScreen(interactiveDonutViewModel = mainViewModel.interactiveDonutViewModel)
         }
     }
 }
