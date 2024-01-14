@@ -56,6 +56,7 @@ class InteractiveDonutViewModel @Inject constructor(): ViewModel() {
         center: Offset,
         tapOffset: Offset,
         currentStrokeValues: List<Float>,
+        currentSelectedIndex: Int,
         onItemSelected: (Int) -> Unit = {},
         onItemDeselected: (Int) -> Unit = {},
     ) {
@@ -80,15 +81,14 @@ class InteractiveDonutViewModel @Inject constructor(): ViewModel() {
         }
 
         if (selectedIndex >= 0 && newDataTapped) {
-            Log.i("Sergio", "valir de selectedIndex ${_selectedIndex.value}")
             _selectedIndex.value = selectedIndex
             onItemSelected(selectedIndex)
         }
         Log.i("Sergio", "Valor de selectedIndex: ${_selectedIndex.value}")
-        Log.i("Sergio", "Valor de newData: $newDataTapped")
-        if (_selectedIndex.value!! >= 0) {
-            onItemDeselected(_selectedIndex.value!!)
-            if (_selectedIndex.value == selectedIndex || !newDataTapped) {
+        if (currentSelectedIndex >= 0) {
+            onItemDeselected(currentSelectedIndex)
+            if (currentSelectedIndex == selectedIndex || !newDataTapped) {
+                Log.i("Sergio", "entra donde no deberia")
                 _selectedIndex.value = -1
             }
         }

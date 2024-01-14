@@ -38,7 +38,7 @@ fun DonutChart(
 ) {
 //    val interactiveDonutViewModel: InteractiveDonutViewModel by viewModel()
     interactiveDonutViewModel.data.value = data
-    val selectedIndex by interactiveDonutViewModel.selectedIndex.observeAsState(initial = -1)
+    val selectedIndex by interactiveDonutViewModel.selectedIndex.observeAsState()
     val animationTargetState = (0..data.items.size).map { // VER LUEGO SI LO LLEVO AL VIEWMODEL
 //        Log.i("Sergio", "item del for de animationTarget: ${it}")
         remember { mutableStateOf(DonutChartState()) }
@@ -76,6 +76,7 @@ fun DonutChart(
                                 center = center,
                                 tapOffset = tapOffset,
                                 currentStrokeValues = animationTargetState.map { it.value.stroke.toPx() },
+                                currentSelectedIndex = selectedIndex!!,
                                 onItemSelected = { index ->
                                     Log.i("Sergio", "Entra en item seleccionado")
                                     animationTargetState[index].value = DonutChartState(
@@ -120,7 +121,7 @@ fun DonutChart(
                 }
             }
         )
-        selectionView(if (selectedIndex >= 0) data.items[selectedIndex] else null)
+        selectionView(if (selectedIndex!! >= 0) data.items[selectedIndex!!] else null)
     }
 }
 
