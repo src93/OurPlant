@@ -2,6 +2,8 @@
 
 package com.cursokotlin.ourplants.login.ui
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +25,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -51,6 +54,7 @@ fun LoginScreen(loginViewModel: LoginViewModel, onCompleteLogin: () -> Unit) {
             loginViewModel = loginViewModel,
             onCompleteLogin = onCompleteLogin
         )
+        ShowToast(loginViewModel = loginViewModel)
     }
 }
 
@@ -129,8 +133,22 @@ fun PasswordField(password: String, loginViewModel: LoginViewModel) {
 }
 
 @Composable
-fun LoginButton(modifier: Modifier, loginViewModel: LoginViewModel, onCompleteLogin: () -> Unit) {
+fun LoginButton(
+    modifier: Modifier,
+    loginViewModel: LoginViewModel,
+    onCompleteLogin: () -> Unit
+) {
     Button(onClick = { loginViewModel.checkDataLogin(onCompleteLogin) }, modifier = modifier, shape = RoundedCornerShape(5.dp)) {
         Text(text = "Entrar")
+    }
+}
+
+@Composable
+fun ShowToast(loginViewModel: LoginViewModel) {
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        loginViewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
 }

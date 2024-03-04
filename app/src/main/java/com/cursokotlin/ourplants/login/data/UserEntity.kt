@@ -1,3 +1,7 @@
 package com.cursokotlin.ourplants.login.data
 
-data class UserEntity(val username: String, val password: String)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class UserEntity(@PrimaryKey val username: String, val password: String)

@@ -25,7 +25,28 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cursokotlin.ourplants.interactivedonut.ui.model.DonutChartData
 import com.cursokotlin.ourplants.interactivedonut.ui.model.DonutChartDataCollection
+import com.cursokotlin.ourplants.interactivedonut.ui.theme.DonutChartTheme
 
+@Composable
+fun DonutChartWithTheme(
+    data: DonutChartDataCollection,
+    modifier: Modifier = Modifier,
+    chartSize: Dp = 350.dp,
+    gapPercentage: Float = 0.04f,
+    interactiveDonutViewModel: InteractiveDonutViewModel,
+    selectionView: @Composable (selectedItem: DonutChartData?) -> Unit = {}
+) {
+    DonutChartTheme() {
+        DonutChart(
+            data = data,
+            modifier = modifier,
+            chartSize = chartSize,
+            gapPercentage = gapPercentage,
+            interactiveDonutViewModel = interactiveDonutViewModel,
+            selectionView = selectionView
+        )
+    }
+}
 
 @Composable
 fun DonutChart(
@@ -36,22 +57,11 @@ fun DonutChart(
     interactiveDonutViewModel: InteractiveDonutViewModel,
     selectionView: @Composable (selectedItem: DonutChartData?) -> Unit = {}
 ) {
-//    val interactiveDonutViewModel: InteractiveDonutViewModel by viewModel()
     interactiveDonutViewModel.data.value = data
     val selectedIndex by interactiveDonutViewModel.selectedIndex.observeAsState()
     val animationTargetState = (0..data.items.size).map { // VER LUEGO SI LO LLEVO AL VIEWMODEL
-//        Log.i("Sergio", "item del for de animationTarget: ${it}")
         remember { mutableStateOf(DonutChartState()) }
     }
-    Log.i("Sergio", "size de data: ${data.items.size}")
-//    animationTargetState.forEach() {
-//        Log.i("Sergio", "item del for de animationTarget: ${it.value.state}")
-//    }
-    (animationTargetState.indices).map {
-        Log.i("Sergio", "indice del for $it")
-        Log.i("Sergio", "item del for de animationTarget: ${animationTargetState[it].value.state}")
-    }
-    Log.i("Sergio", "size de animationTarget: ${animationTargetState.size}")
     val animValues = (0..data.items.size).map {
         animateDpAsState(
             targetValue = animationTargetState[it].value.stroke,
@@ -61,68 +71,57 @@ fun DonutChart(
     val gapAngle = interactiveDonutViewModel.calculateGapAngle(gapPercentage = gapPercentage)
     var center = Offset(0f, 0f)
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp), contentAlignment = Alignment.Center
-    ) {
-        Canvas(
-            modifier = Modifier
-                .size(chartSize)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { tapOffset ->
-                            interactiveDonutViewModel.handleCanvasTap(
-                                center = center,
-                                tapOffset = tapOffset,
-                                currentStrokeValues = animationTargetState.map { it.value.stroke.toPx() },
-                                currentSelectedIndex = selectedIndex!!,
-                                onItemSelected = { index ->
-                                    Log.i("Sergio", "Entra en item seleccionado")
-                                    animationTargetState[index].value = DonutChartState(
-                                        DonutChartState.State.Selected
-                                    )
-                                    animationTargetState.forEach() {
-                                        Log.i("Sergio", "for del item seleccionado: ${it.value.state}")
-                                    }
-                                },
-                                onItemDeselected = { index ->
-                                    animationTargetState[index].value = DonutChartState(
-                                        DonutChartState.State.Unselected
-                                    )
-                                }
-                            )
-                        }
-                    )
-                },
-            onDraw = {
-                Log.i("Sergio", "Entra en draw")
-                val defaultStrokeWidth = STROKE_SIZE_UNSELECTED.toPx()
-                center = this.center
-                interactiveDonutViewModel.clearAngleList()
-                var lastAngle = 0f
-                data.items.forEachIndexed { ind, item ->
-                    val sweepAngle = interactiveDonutViewModel.findSweepAngle(ind, gapPercentage)
-                    interactiveDonutViewModel.addNewAngle(lastAngle, sweepAngle)
-                    val strokeWidth = animValues[ind].value.toPx()
-                    drawArc(
-                        color = item.color,
-                        startAngle = lastAngle,
-                        sweepAngle = sweepAngle,
-                        useCenter = false,
-                        topLeft = Offset(defaultStrokeWidth / 2, defaultStrokeWidth / 2),
-                        style = Stroke(strokeWidth, cap = StrokeCap.Butt),
-                        size = Size(
-                            size.width - defaultStrokeWidth,
-                            size.height - defaultStrokeWidth
+    Canvas(
+        modifier = modifier
+            .size(chartSize)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { tapOffset ->
+                        interactiveDonutViewModel.handleCanvasTap(
+                            center = center,
+                            tapOffset = tapOffset,
+                            currentStrokeValues = animationTargetState.map { it.value.stroke.toPx() },
+                            currentSelectedIndex = selectedIndex!!,
+                            onItemSelected = { index ->
+                                animationTargetState[index].value = DonutChartState(
+                                    DonutChartState.State.Selected
+                                )
+                            },
+                            onItemDeselected = { index ->
+                                animationTargetState[index].value = DonutChartState(
+                                    DonutChartState.State.Unselected
+                                )
+                            }
                         )
+                    }
+                )
+            },
+        onDraw = {
+            val defaultStrokeWidth = STROKE_SIZE_UNSELECTED.toPx()
+            center = this.center
+            interactiveDonutViewModel.clearAngleList()
+            var lastAngle = 0f
+            data.items.forEachIndexed { ind, item ->
+                val sweepAngle = interactiveDonutViewModel.findSweepAngle(ind, gapPercentage)
+                interactiveDonutViewModel.addNewAngle(lastAngle, sweepAngle)
+                val strokeWidth = animValues[ind].value.toPx()
+                drawArc(
+                    color = item.color,
+                    startAngle = lastAngle,
+                    sweepAngle = sweepAngle,
+                    useCenter = false,
+                    topLeft = Offset(defaultStrokeWidth / 2, defaultStrokeWidth / 2),
+                    style = Stroke(strokeWidth, cap = StrokeCap.Butt),
+                    size = Size(
+                        size.width - defaultStrokeWidth,
+                        size.height - defaultStrokeWidth
                     )
-                    lastAngle += sweepAngle + gapAngle
-                }
+                )
+                lastAngle += sweepAngle + gapAngle
             }
-        )
-        selectionView(if (selectedIndex!! >= 0) data.items[selectedIndex!!] else null)
-    }
+        }
+    )
+    selectionView(if (selectedIndex!! >= 0) data.items[selectedIndex!!] else null)
 }
 
 

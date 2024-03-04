@@ -2,60 +2,50 @@ package com.cursokotlin.ourplants.home.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.cursokotlin.ourplants.interactivedonut.ui.DonutChart
+import com.cursokotlin.ourplants.components.bottomappbarnavigation.BottomAppBarNavigation
+import com.cursokotlin.ourplants.interactivedonut.ui.DonutChartWithTheme
 import com.cursokotlin.ourplants.interactivedonut.ui.InteractiveDonutViewModel
 import com.cursokotlin.ourplants.interactivedonut.ui.model.DonutChartData
 import com.cursokotlin.ourplants.interactivedonut.ui.model.DonutChartDataCollection
+import com.cursokotlin.ourplants.interactivedonut.ui.theme.PetroleumGray
+import com.cursokotlin.ourplants.interactivedonut.ui.theme.PetroleumLightGray
+import com.cursokotlin.ourplants.interactivedonut.ui.theme.RobingEggBlue
+import com.cursokotlin.ourplants.interactivedonut.ui.theme.Sapphire
+import com.cursokotlin.ourplants.interactivedonut.ui.theme.itemTextStyle
+import com.cursokotlin.ourplants.interactivedonut.ui.theme.moneyAmountStyle
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.text.DecimalFormat
-
-val OxfordBlue = Color(0xFF01184a)
-val MetallicYellow = Color(0xFFFFCE08)
-val VividOrange = Color(0xFFFD5F00)
-val Sapphire = Color(0xFF1259b8)
-val RobingEggBlue = Color(0xFF0fd4C4)
-
-val PetroleumGray = Color(0xFF37474f)
-val PetroleumLightGray = Color(0xFF455a64)
-
-val itemTextStyle = TextStyle(
-    fontFamily = FontFamily.SansSerif,
-    fontWeight = FontWeight.Bold,
-    fontSize = 24.sp,
-    lineHeight = 28.sp,
-    letterSpacing = 0.sp
-)
-
-val moneyAmountStyle = TextStyle(
-    fontFamily = FontFamily.SansSerif,
-    fontWeight = FontWeight.Black,
-    fontSize = 56.sp,
-    lineHeight = 28.sp,
-    letterSpacing = 0.sp
-)
 
 val viewData = DonutChartDataCollection(
     listOf(
-        DonutChartData(1200.0f, Sapphire, title = "Food & Groceries"),
-        DonutChartData(1500.0f, RobingEggBlue, title = "Rent"),
-        DonutChartData(300.0f, MetallicYellow, title = "Gas"),
-        DonutChartData(700.0f, OxfordBlue, title = "Online Purchases"),
-        DonutChartData(300.0f, VividOrange, title = "Clothing")
+        DonutChartData(1200.0f, Sapphire, title = "Sergio"),
+        DonutChartData(1500.0f, RobingEggBlue, title = "Andrea's"),
     )
 )
 
@@ -83,32 +73,41 @@ fun Content(interactiveDonutViewModel: InteractiveDonutViewModel) {
     Scaffold(
         topBar = {
             Text(
-                "Fancy Donut Chart",
+                "Contador de Karma",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
             )
+        },
+        bottomBar = {
+            BottomAppBarNavigation(goHome = { /*TODO*/ }, goNewPlan = { /*TODO*/ }) {
+                
+            }
         }
     ) { paddingValues ->
-        DonutChart(
-            modifier = Modifier.padding(paddingValues),
-            data = viewData,
-            interactiveDonutViewModel = interactiveDonutViewModel
-        ) { selected ->
-            AnimatedContent(targetState = selected) {
-                val amount = it?.amount ?: viewData.totalAmount
-                val text = it?.title ?: "Total"
+        Box(modifier = Modifier.fillMaxSize()) {
+            DonutChartWithTheme(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .align(Alignment.Center),
+                data = viewData,
+                interactiveDonutViewModel = interactiveDonutViewModel
+            ) { selected ->
+                AnimatedContent(targetState = selected, modifier = Modifier.align(Alignment.Center)) {
+                    val amount = it?.amount ?: viewData.totalAmount
+                    val text = it?.title ?: "Total"
 
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        "$${amount.toMoneyFormat(true)}",
-                        style = moneyAmountStyle, color = PetroleumGray
-                    )
-                    Text(text, style = itemTextStyle, color = PetroleumLightGray)
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "$${amount.toMoneyFormat(true)}",
+                            style = moneyAmountStyle, color = PetroleumGray
+                        )
+                        Text(text, style = itemTextStyle, color = PetroleumLightGray)
+                    }
                 }
             }
         }

@@ -9,11 +9,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cursokotlin.ourplants.home.ui.HomeScreen
 import com.cursokotlin.ourplants.login.ui.LoginScreen
+import com.cursokotlin.ourplants.nav.ui.Screen.*
 
 @Composable
 fun NavGraph(
     navHostController: NavHostController = rememberNavController(),
-    startDestination: String = MainDestinations.LOGIN_ROUTE,
+    startDestination: String = Login.route,
     mainViewModel: MainViewModel,
     finishActivity: () -> Unit = {}
 ) {
@@ -22,7 +23,7 @@ fun NavGraph(
     }
 
     NavHost(navController = navHostController, startDestination = startDestination) {
-        composable(route = MainDestinations.LOGIN_ROUTE) {
+        composable(route = Login.route) {
             BackHandler() {
                 finishActivity()
             }
@@ -30,7 +31,8 @@ fun NavGraph(
             LoginScreen(loginViewModel = mainViewModel.loginViewModel) { actions.goHome() }
         }
 
-        composable(route = MainDestinations.HOME_ROUTE) {
+        composable(route = Home.route) {
+            // aqui tengo que pasar los 3 navegaciones
             HomeScreen(interactiveDonutViewModel = mainViewModel.interactiveDonutViewModel)
         }
     }
