@@ -33,7 +33,7 @@ fun NavGraph(
 
         composable(route = Home.route) {
             // aqui tengo que pasar los 3 navegaciones
-            HomeScreen(interactiveDonutViewModel = mainViewModel.interactiveDonutViewModel)
+            HomeScreen(homeViewModel = mainViewModel.homeViewModel, interactiveDonutViewModel = mainViewModel.interactiveDonutViewModel)
         }
     }
 }
