@@ -1,5 +1,6 @@
 package com.cursokotlin.ourplants.nav.ui
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -10,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.cursokotlin.ourplants.home.ui.HomeScreen
 import com.cursokotlin.ourplants.login.ui.LoginScreen
 import com.cursokotlin.ourplants.nav.ui.Screen.*
+import com.cursokotlin.ourplants.newplan.ui.NewPlanScreen
 
 @Composable
 fun NavGraph(
@@ -33,7 +35,12 @@ fun NavGraph(
 
         composable(route = Home.route) {
             // aqui tengo que pasar los 3 navegaciones
-            HomeScreen(homeViewModel = mainViewModel.homeViewModel, interactiveDonutViewModel = mainViewModel.interactiveDonutViewModel)
+            HomeScreen(homeViewModel = mainViewModel.homeViewModel, interactiveDonutViewModel = mainViewModel.interactiveDonutViewModel, goCheckPlan = actions.goNewPlan)
+        }
+
+        composable(route = NewPlan.route) {
+            Log.i("Pruebas_barNavigation", "entra en el composable")
+            NewPlanScreen()
         }
     }
 }

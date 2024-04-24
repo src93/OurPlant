@@ -76,7 +76,11 @@ fun Float.toMoneyFormat(
 }
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel, interactiveDonutViewModel: InteractiveDonutViewModel) {
+fun HomeScreen(
+    homeViewModel: HomeViewModel,
+    interactiveDonutViewModel: InteractiveDonutViewModel,
+    goCheckPlan: () -> Unit
+) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by produceState<HomeUiState>(
         initialValue = HomeUiState.Loading,
@@ -96,7 +100,7 @@ fun HomeScreen(homeViewModel: HomeViewModel, interactiveDonutViewModel: Interact
 
         is HomeUiState.Success -> {
             val listKarmaPoint = (uiState as HomeUiState.Success).karmaPoints
-            Content(interactiveDonutViewModel, homeViewModel, listKarmaPoint)
+            Content(interactiveDonutViewModel, homeViewModel, listKarmaPoint, goCheckPlan)
         }
     }
 }
@@ -106,7 +110,8 @@ fun HomeScreen(homeViewModel: HomeViewModel, interactiveDonutViewModel: Interact
 fun Content(
     interactiveDonutViewModel: InteractiveDonutViewModel,
     homeViewModel: HomeViewModel,
-    listKarmaPoint: List<KarmaPointModel>
+    listKarmaPoint: List<KarmaPointModel>,
+    goCheckPlan: () -> Unit
 ) {
     val showModal by homeViewModel.showModal.observeAsState()
     Scaffold(
@@ -120,7 +125,7 @@ fun Content(
             )
         },
         bottomBar = {
-            BottomAppBarNavigation(goHome = { /*TODO*/ }, goNewPlan = { /*TODO*/ }) {
+            BottomAppBarNavigation(goHome = { /*TODO*/ }, goNewPlan = { goCheckPlan() }) {
 
             }
         }
@@ -137,7 +142,7 @@ fun Content(
                     targetState = selected,
                     modifier = Modifier.align(Alignment.Center)
                 ) {
-                    val amount = it?.amount ?: viewData.totalAmount
+                    val amount = it?.amount ?: listKarmaPoint.sumOf { item -> item.karmaPoints }.toFloat()
                     val text = it?.title ?: "Total"
 
                     Column(

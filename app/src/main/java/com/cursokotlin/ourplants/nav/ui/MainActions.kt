@@ -1,5 +1,6 @@
 package com.cursokotlin.ourplants.nav.ui
 
+import android.util.Log
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.cursokotlin.ourplants.nav.ui.Screen.*
@@ -12,9 +13,10 @@ class MainActions(navController: NavController) {
         navController.navigate(Home.route)
     }
     val goNewPlan = {
-        navController.navigate(NEW_PLAN.route)
+        Log.i("Pruebas_barNavigation", "entra en el main action")
+        navController.navigate(NewPlan.route)
     }
     val  goCheckPlan = {
-        navController.navigate(CHECK_PLAN.route)
+        navController.navigate(CheckPlan.route)
     }
 }

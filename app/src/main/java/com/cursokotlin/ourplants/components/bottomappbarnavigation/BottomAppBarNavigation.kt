@@ -1,5 +1,6 @@
 package com.cursokotlin.ourplants.components.bottomappbarnavigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,13 +21,13 @@ fun BottomAppBarNavigation(goHome: () -> Unit, goNewPlan: () -> Unit, goCheckPla
     BottomAppBar(containerColor = Color.Blue) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
             NavigationItem(icon = Icons.Default.Home, label = "Home") {
-                goHome()
+                goHome
             }
             NavigationItem(icon = Icons.Default.Create, label = "New Plan") {
                 goNewPlan()
             }
             NavigationItem(icon = Icons.Default.CheckCircle, label = "Check Plan") {
-                goCheckPlan()
+                goCheckPlan
             }
         }
     }
@@ -34,7 +35,10 @@ fun BottomAppBarNavigation(goHome: () -> Unit, goNewPlan: () -> Unit, goCheckPla
 
 @Composable
 private fun NavigationItem(icon: ImageVector, label: String, action: () -> Unit) {
-    IconButton(onClick = { action() }) {
+    IconButton(onClick = {
+        Log.i("Pruebas_barNavigation", "entra en el click")
+        action()
+    }) {
         Icon(imageVector = icon, contentDescription = label)
     }
 }
