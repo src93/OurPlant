@@ -2,7 +2,6 @@
 
 package com.cursokotlin.ourplants.login.ui
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel, onCompleteLogin: () -> Unit) {
+fun LoginScreen(loginViewModel: LoginViewModel, onCompleteLogin: (String) -> Unit) {
     val username by loginViewModel.username.observeAsState("")
     val password by loginViewModel.password.observeAsState("")
     Box(
@@ -136,9 +135,13 @@ fun PasswordField(password: String, loginViewModel: LoginViewModel) {
 fun LoginButton(
     modifier: Modifier,
     loginViewModel: LoginViewModel,
-    onCompleteLogin: () -> Unit
+    onCompleteLogin: (String) -> Unit
 ) {
-    Button(onClick = { loginViewModel.checkDataLogin(onCompleteLogin) }, modifier = modifier, shape = RoundedCornerShape(5.dp)) {
+    Button(
+        onClick = { loginViewModel.checkDataLogin(onCompleteLogin) },
+        modifier = modifier,
+        shape = RoundedCornerShape(5.dp)
+    ) {
         Text(text = "Entrar")
     }
 }

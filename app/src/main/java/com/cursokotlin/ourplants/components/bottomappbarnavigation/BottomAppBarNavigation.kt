@@ -15,19 +15,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.cursokotlin.ourplants.nav.ui.Screen
 
 @Composable
-fun BottomAppBarNavigation(goHome: () -> Unit, goNewPlan: () -> Unit, goCheckPlan: () -> Unit) {
+fun BottomAppBarNavigation(navigate: (String) -> Unit) {
     BottomAppBar(containerColor = Color.Blue) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
             NavigationItem(icon = Icons.Default.Home, label = "Home") {
-                goHome
+                navigate(Screen.Home.route)
             }
             NavigationItem(icon = Icons.Default.Create, label = "New Plan") {
-                goNewPlan()
+                navigate(Screen.NewPlan.route)
             }
             NavigationItem(icon = Icons.Default.CheckCircle, label = "Check Plan") {
-                goCheckPlan
+                navigate(Screen.CheckPlan.route)
             }
         }
     }

@@ -79,7 +79,7 @@ fun Float.toMoneyFormat(
 fun HomeScreen(
     homeViewModel: HomeViewModel,
     interactiveDonutViewModel: InteractiveDonutViewModel,
-    goCheckPlan: () -> Unit
+    navigate: (String) -> Unit
 ) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by produceState<HomeUiState>(
@@ -100,7 +100,7 @@ fun HomeScreen(
 
         is HomeUiState.Success -> {
             val listKarmaPoint = (uiState as HomeUiState.Success).karmaPoints
-            Content(interactiveDonutViewModel, homeViewModel, listKarmaPoint, goCheckPlan)
+            Content(interactiveDonutViewModel, homeViewModel, listKarmaPoint, navigate)
         }
     }
 }
@@ -111,7 +111,7 @@ fun Content(
     interactiveDonutViewModel: InteractiveDonutViewModel,
     homeViewModel: HomeViewModel,
     listKarmaPoint: List<KarmaPointModel>,
-    goCheckPlan: () -> Unit
+    navigate: (String) -> Unit
 ) {
     val showModal by homeViewModel.showModal.observeAsState()
     Scaffold(
@@ -125,9 +125,7 @@ fun Content(
             )
         },
         bottomBar = {
-            BottomAppBarNavigation(goHome = { /*TODO*/ }, goNewPlan = { goCheckPlan() }) {
-
-            }
+            BottomAppBarNavigation(navigate = navigate)
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {

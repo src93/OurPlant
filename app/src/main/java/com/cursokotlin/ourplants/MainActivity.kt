@@ -13,6 +13,7 @@ import com.cursokotlin.ourplants.interactivedonut.ui.InteractiveDonutViewModel
 import com.cursokotlin.ourplants.login.ui.LoginViewModel
 import com.cursokotlin.ourplants.nav.ui.MainViewModel
 import com.cursokotlin.ourplants.nav.ui.NavGraph
+import com.cursokotlin.ourplants.requestnewplan.ui.RequestNewPlanViewModel
 import com.cursokotlin.ourplants.ui.theme.OurPlantsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
     private val interactiveDonutViewModel: InteractiveDonutViewModel by viewModels()
+    private val requestNewPlanViewModel: RequestNewPlanViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -33,7 +35,8 @@ class MainActivity : ComponentActivity() {
                     val mainViewModel = MainViewModel(
                         loginViewModel = loginViewModel,
                         homeViewModel = homeViewModel,
-                        interactiveDonutViewModel = interactiveDonutViewModel
+                        interactiveDonutViewModel = interactiveDonutViewModel,
+                        requestNewPlanViewModel = requestNewPlanViewModel
                     )
                     NavGraph(mainViewModel = mainViewModel, finishActivity = { finish() })
                 }

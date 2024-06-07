@@ -7,13 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.cursokotlin.ourplants.login.domain.AddUser
 import com.cursokotlin.ourplants.login.domain.GetUser
 import com.cursokotlin.ourplants.login.domain.GetUsers
-import com.cursokotlin.ourplants.login.ui.model.UserModel
+import com.cursokotlin.ourplants.nav.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -47,7 +44,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun checkDataLogin(onCompleteLogin: () -> Unit) {
+    fun checkDataLogin(onCompleteLogin: (String) -> Unit) {
         Log.i("Login", "entra en el check")
         viewModelScope.launch {
             Log.i("Login", "entra en el launch")
@@ -55,7 +52,8 @@ class LoginViewModel @Inject constructor(
             synchronized(this@LoginViewModel) {
                 Log.i("Login", "entra en synchronized ${user.username}")
                 if (user.username !== "unknown") {
-                    onCompleteLogin()
+                    Log.i("Login", "entra dentro del if, antes de hacer el navigate")
+                    onCompleteLogin(Screen.Home.route)
                 } else {
                     Log.i("Login", "entra en el else")
                     viewModelScope.launch {
